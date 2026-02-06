@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Fashion Collection</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            text-shadow: 0 0 20px rgba(100, 100, 255, 0.5);
+        }
+        .subtitle { text-align: center; color: #888; margin-bottom: 40px; }
+        .add-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(10px);
+        }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; color: #b0b0b0; font-weight: 500; }
+        input[type="text"], input[type="url"] {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+        }
+        .file-input-wrapper { position: relative; overflow: hidden; display: inline-block; width: 100%; }
+        .file-input-wrapper input[type=file] { position: absolute; left: -9999px; }
+        .file-input-label {
+            display: block;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 2px dashed rgba(100, 100, 255, 0.3);
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            color: #888;
+        }
+        .btn {
+            background: linear-gradient(135deg, #6464ff 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+        }
+        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
+        .item-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+        .item-image { width: 100%; height: 350px; object-fit: cover; display: block; background: #0a0a0a; }
+        .item-details { padding: 20px; }
+        .item-link { color: #6464ff; text-decoration: none; font-size: 14px; word-break: break-all; }
+        .item-date { color: #666; font-size: 12px; margin-top: 10px; }
+        .delete-btn {
+            background: rgba(255, 71, 87, 0.2);
+            color: #ff4757;
+            border: 1px solid rgba(255, 71, 87, 0.3);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 15px;
+        }
+        .empty-state { text-align: center; padding: 60px; color: #666; }
+        .preview-image { max-width: 200px; max-height: 200px; margin-top: 10px; border-radius: 8px; display: none; }
+        @media (max-width: 768px) { .gallery { grid-template-columns: 1fr; } h1 { font-size: 1.8rem; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>👕 My Fashion Collection</h1>
+        <p class="subtitle">Save your favorite clothes with links and images</p>
+
+        <div class="add-item">
+            <div class="form-group">
+                <label>Product Link (URL)</label>
+                <input type="url" id="clothingLink" placeholder="https://example.com/product..." required>
+            </div>
+            <div class="form-group">
+                <label>Upload Image</label>
+                <div class="file-input-wrapper">
+                    <input type="file" id="clothingImage" accept="image/*" required>
+                    <label for="clothingImage" class="file-input-label">📷 Click to upload image</label>
+                </div>
+                <img id="preview" class="preview-image">
+            </div>
+            <button class="btn" onclick="addItem()">Add to Collection</button>
+        </div>
+
+        <div id="gallery" class="gallery">
+            <div class="empty-state"><p>No items yet. Add your first piece above! 👆</p></div>
+        </div>
+    </div>
+
+    <script>
+        let items = JSON.parse(localStorage.getItem('fashionItems')) || [];
+        
+        document.getElementById('clothingImage').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('preview').src = e.target.result;
+                    document.getElementById('preview').style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function addItem() {
+            const link = document.getElementById('clothingLink').value;
+            const imageInput = document.getElementById('clothingImage');
+            
+            if (!link || !imageInput.files[0]) {
+                alert('Please fill in both the link and upload an image!');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const item = {
+                    id: Date.now(),
+                    link: link,
+                    image: e.target.result,
+                    date: new Date().toLocaleDateString()
+                };
+                items.unshift(item);
+                localStorage.setItem('fashionItems', JSON.stringify(items));
+                renderGallery();
+                document.getElementById('clothingLink').value = '';
+                imageInput.value = '';
+                document.getElementById('preview').style.display = 'none';
+            };
+            reader.readAsDataURL(imageInput.files[0]);
+        }
+
+        function deleteItem(id) {
+            if (confirm('Delete this item?')) {
+                items = items.filter(item => item.id !== id);
+                localStorage.setItem('fashionItems', JSON.stringify(items));
+                renderGallery();
+            }
+        }
+
+        function renderGallery() {
+            const gallery = document.getElementById('gallery');
+            if (items.length === 0) {
+                gallery.innerHTML = '<div class="empty-state" style="grid-column: 1/-1;"><p>No items yet. Add your first piece above! 👆</p></div>';
+                return;
+            }
+            gallery.innerHTML = items.map(item => `
+                <div class="item-card">
+                    <img src="${item.image}" class="item-image">
+                    <div class="item-details">
+                        <a href="${item.link}" target="_blank" class="item-link">🔗 ${item.link}</a>
+                        <div class="item-date">Added on ${item.date}</div>
+                        <button class="delete-btn" onclick="deleteItem(${item.id})">Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        renderGallery();
+    </script>
+</body>
+</html>
