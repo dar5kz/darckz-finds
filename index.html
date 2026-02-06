@@ -1,191 +1,213 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ro">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Fashion Collection</title>
+    <title>Opium Links</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
-            color: #e0e0e0;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             min-height: 100vh;
+            color: #fff;
             padding: 20px;
         }
-        .container { max-width: 1200px; margin: 0 auto; }
-        h1 {
-            text-align: center;
-            color: #fff;
-            margin-bottom: 10px;
-            font-size: 2.5rem;
-            text-shadow: 0 0 20px rgba(100, 100, 255, 0.5);
-        }
-        .subtitle { text-align: center; color: #888; margin-bottom: 40px; }
-        .add-item {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 40px;
-            backdrop-filter: blur(10px);
-        }
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; color: #b0b0b0; font-weight: 500; }
-        input[type="text"], input[type="url"] {
-            width: 100%;
-            padding: 12px 15px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            color: #fff;
-            font-size: 16px;
-        }
-        .file-input-wrapper { position: relative; overflow: hidden; display: inline-block; width: 100%; }
-        .file-input-wrapper input[type=file] { position: absolute; left: -9999px; }
-        .file-input-label {
-            display: block;
-            padding: 40px;
-            background: rgba(0, 0, 0, 0.3);
-            border: 2px dashed rgba(100, 100, 255, 0.3);
-            border-radius: 10px;
-            text-align: center;
-            cursor: pointer;
-            color: #888;
-        }
-        .btn {
-            background: linear-gradient(135deg, #6464ff 0%, #8b5cf6 100%);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            display: block;
+
+        .container {
+            max-width: 800px;
             margin: 0 auto;
         }
-        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
-        .item-card {
-            background: rgba(255, 255, 255, 0.03);
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #e94560, #ff6b6b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(233, 69, 96, 0.3);
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #e94560;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: '▸';
+            color: #ff6b6b;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .link-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            text-decoration: none;
+            color: #fff;
+            transition: all 0.3s ease;
             border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
+            position: relative;
             overflow: hidden;
         }
-        .item-image { width: 100%; height: 350px; object-fit: cover; display: block; background: #0a0a0a; }
-        .item-details { padding: 20px; }
-        .item-link { color: #6464ff; text-decoration: none; font-size: 14px; word-break: break-all; }
-        .item-date { color: #666; font-size: 12px; margin-top: 10px; }
-        .delete-btn {
-            background: rgba(255, 71, 87, 0.2);
-            color: #ff4757;
-            border: 1px solid rgba(255, 71, 87, 0.3);
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            margin-top: 15px;
+
+        .link-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
         }
-        .empty-state { text-align: center; padding: 60px; color: #666; }
-        .preview-image { max-width: 200px; max-height: 200px; margin-top: 10px; border-radius: 8px; display: none; }
-        @media (max-width: 768px) { .gallery { grid-template-columns: 1fr; } h1 { font-size: 1.8rem; } }
+
+        .link-card:hover::before {
+            left: 100%;
+        }
+
+        .link-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 10px 40px rgba(233, 69, 96, 0.2);
+            border-color: rgba(233, 69, 96, 0.3);
+        }
+
+        .link-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .link-url {
+            font-size: 0.85rem;
+            color: #888;
+            word-break: break-all;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .add-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(45deg, #e94560, #ff6b6b);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 15px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .add-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(233, 69, 96, 0.4);
+        }
+
+        .icon {
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 600px) {
+            .links-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>👕 My Fashion Collection</h1>
-        <p class="subtitle">Save your favorite clothes with links and images</p>
+        <h1>Opium Links</h1>
 
-        <div class="add-item">
-            <div class="form-group">
-                <label>Product Link (URL)</label>
-                <input type="url" id="clothingLink" placeholder="https://example.com/product..." required>
-            </div>
-            <div class="form-group">
-                <label>Upload Image</label>
-                <div class="file-input-wrapper">
-                    <input type="file" id="clothingImage" accept="image/*" required>
-                    <label for="clothingImage" class="file-input-label">📷 Click to upload image</label>
+        <!-- Secțiunea dar5kzfinds -->
+        <div class="section">
+            <h2 class="section-title">dar5kzfinds</h2>
+            <div class="links-grid" id="dar5kzfinds-grid">
+                <div class="empty-state">
+                    No links yet<br>
+                    <button class="add-btn" onclick="addLink('dar5kzfinds')">
+                        <span class="icon">+</span> Add your first link
+                    </button>
                 </div>
-                <img id="preview" class="preview-image">
             </div>
-            <button class="btn" onclick="addItem()">Add to Collection</button>
         </div>
 
-        <div id="gallery" class="gallery">
-            <div class="empty-state"><p>No items yet. Add your first piece above! 👆</p></div>
+        <!-- Secțiunea Shoes (nouă) -->
+        <div class="section">
+            <h2 class="section-title">Shoes</h2>
+            <div class="links-grid" id="shoes-grid">
+                <div class="empty-state">
+                    No links yet<br>
+                    <button class="add-btn" onclick="addLink('shoes')">
+                        <span class="icon">+</span> Add your first link
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        let items = JSON.parse(localStorage.getItem('fashionItems')) || [];
-        
-        document.getElementById('clothingImage').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('preview').src = e.target.result;
-                    document.getElementById('preview').style.display = 'block';
-                }
-                reader.readAsDataURL(file);
-            }
-        });
-
-        function addItem() {
-            const link = document.getElementById('clothingLink').value;
-            const imageInput = document.getElementById('clothingImage');
+        function addLink(section) {
+            const title = prompt('Enter link title:');
+            const url = prompt('Enter URL:');
             
-            if (!link || !imageInput.files[0]) {
-                alert('Please fill in both the link and upload an image!');
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const item = {
-                    id: Date.now(),
-                    link: link,
-                    image: e.target.result,
-                    date: new Date().toLocaleDateString()
-                };
-                items.unshift(item);
-                localStorage.setItem('fashionItems', JSON.stringify(items));
-                renderGallery();
-                document.getElementById('clothingLink').value = '';
-                imageInput.value = '';
-                document.getElementById('preview').style.display = 'none';
-            };
-            reader.readAsDataURL(imageInput.files[0]);
-        }
-
-        function deleteItem(id) {
-            if (confirm('Delete this item?')) {
-                items = items.filter(item => item.id !== id);
-                localStorage.setItem('fashionItems', JSON.stringify(items));
-                renderGallery();
+            if (title && url) {
+                const grid = document.getElementById(section + '-grid');
+                
+                // Remove empty state if it exists
+                if (grid.querySelector('.empty-state')) {
+                    grid.innerHTML = '';
+                }
+                
+                const linkCard = document.createElement('a');
+                linkCard.className = 'link-card';
+                linkCard.href = url;
+                linkCard.target = '_blank';
+                linkCard.innerHTML = `
+                    <div class="link-title">${title}</div>
+                    <div class="link-url">${url}</div>
+                `;
+                
+                grid.appendChild(linkCard);
             }
         }
-
-        function renderGallery() {
-            const gallery = document.getElementById('gallery');
-            if (items.length === 0) {
-                gallery.innerHTML = '<div class="empty-state" style="grid-column: 1/-1;"><p>No items yet. Add your first piece above! 👆</p></div>';
-                return;
-            }
-            gallery.innerHTML = items.map(item => `
-                <div class="item-card">
-                    <img src="${item.image}" class="item-image">
-                    <div class="item-details">
-                        <a href="${item.link}" target="_blank" class="item-link">🔗 ${item.link}</a>
-                        <div class="item-date">Added on ${item.date}</div>
-                        <button class="delete-btn" onclick="deleteItem(${item.id})">Delete</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        renderGallery();
     </script>
 </body>
 </html>
